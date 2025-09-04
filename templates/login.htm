@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login - SAVR</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html, body { height: 100%; }
+
+    body{
+      margin: 0;
+      min-height: 100vh;            /* prevent clipping */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;                /* breathing room on small screens */
+      background: linear-gradient(to bottom, #1dc36e, #055e46);
+      font-family: 'TT Norms', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    .login-container{
+      width: min(500px, 92vw);
+      text-align: center;
+    }
+
+    h1{
+      color: #edd070;
+      font-size: clamp(36px, 9vw, 64px);
+      margin: 0 0 6px 0;
+      line-height: 1.05;
+      font-family:'TT Norms',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    }
+
+    h2{
+      color: #ffffff;
+      font-size: clamp(16px, 4.2vw, 24px);
+      margin: 6px 0 18px 0;
+      line-height: 1.2;
+    }
+
+    input[type="text"], input[type="password"]{
+      width: 100%;
+      padding: 14px 18px;
+      margin: 10px 0;
+      border-radius: 35px;
+      border: none;
+      background: #e6e6e6;
+      color: #454545;
+      font-family: inherit;
+      font-size: 16px;
+    }
+    input::placeholder{ color:#454545; }
+
+    button{
+      width: 100%;
+      padding: 14px 18px;
+      margin: 12px 0;
+      border-radius: 35px;
+      border: none;
+      background: #1dc36e;
+      color: #ffffff;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: filter .2s ease;
+      font-size: 16px;
+    }
+    button:hover{ filter: brightness(.95); }
+
+    .white-text{ color:#ffffff; }
+    a{ color:#edd070; text-decoration:none; font-weight:700; }
+    a:hover{ text-decoration:underline; }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h1>SAVR</h1>
+    <h2>Login to SAVR</h2>
+
+    <form method="POST" action="/">
+      <input type="text" name="email" placeholder="E-mail" required />
+      <input type="password" name="password" placeholder="Password" required />
+      <button type="submit">Log In</button>
+    </form>
+
+    <p class="white-text">Don’t have an Account? <a href="/UserRegistration">Sign Up</a></p>
+    <p class="white-text">Or <a href="/PartnerRegistration">Sign Up as Partner</a></p>
+  </div>
+</body>
+</html>

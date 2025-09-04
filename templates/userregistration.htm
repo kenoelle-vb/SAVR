@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>User Registration - SAVR</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { height: 100%; }
+
+    /* Stable, non-repeating gradient background */
+    html{
+      min-height:100%;
+      background: linear-gradient(to bottom, #1dc36e, #055e46) fixed no-repeat;
+      background-size: cover;
+    }
+
+    /* Let content flow from the top; no vertical centering */
+    body{
+      margin-bottom:10vw;
+      min-height:100svh;
+      padding: clamp(20px, 6vh, 48px) clamp(16px, 4vw, 28px) clamp(32px, 10vh, 72px);
+      background: transparent;
+      font-family: 'TT Norms', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    .registration-container{
+      width:min(560px, 94vw);
+      margin: 0 auto;              /* center horizontally only */
+      text-align:center;
+      padding-bottom: 6vh; 
+    }
+
+    h1{
+      color:#edd070;
+      font-size: clamp(36px, 9vw, 64px);
+      margin: 0 0 8px 0;
+      line-height:1.05;
+      font-family:'TT Norms',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    }
+
+    h2{
+      color:#ffffff;
+      font-size: clamp(16px, 4.2vw, 24px);
+      margin: 4px 0 22px 0;
+    }
+
+    input[type="text"], input[type="password"], input[type="email"]{
+      width: 100%;
+      padding: 14px 18px;
+      margin: 10px 0;
+      border-radius: 35px;
+      border: none;
+      background: #e6e6e6;
+      color: #454545;
+      font-family: inherit;
+      font-size: 16px;
+    }
+    input::placeholder { color:#454545; }
+
+    .terms{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      margin:8px 0;
+      font-size:14px;
+      color:#ffffff;
+      flex-wrap:wrap;
+    }
+
+    button{
+      width:100%;
+      padding:14px 18px;
+      margin:16px 0 10px;
+      border-radius:35px;
+      border:none;
+      background:#1dc36e;
+      color:#ffffff;
+      font-weight:700;
+      font-family:inherit;
+      cursor:pointer;
+      transition: filter .2s ease;
+      font-size:16px;
+    }
+    button:hover{ filter:brightness(.95); }
+
+    a{ color:#edd070; text-decoration:none; font-weight:700; }
+    a:hover{ text-decoration:underline; }
+
+    .white-text{ color:#ffffff; }
+  </style>
+</head>
+<body>
+  <div class="registration-container">
+    <h1>SAVR</h1>
+    <h2>User Registration</h2>
+
+    <form method="POST" action="/UserRegistration">
+      <input type="text" name="first_name" placeholder="First Name" required />
+      <input type="text" name="last_name" placeholder="Last Name (Optional)" />
+      <input type="email" name="email" placeholder="E-mail" required />
+      <input type="password" name="password" placeholder="Password" required />
+      <input type="password" name="re_password" placeholder="Re-enter Password" required />
+
+      <div class="terms">
+        <input type="checkbox" name="terms_read" required />
+        <span>I have read the</span> <a href="/TermsAndConditions">Terms &amp; Conditions</a>
+      </div>
+      <div class="terms">
+        <input type="checkbox" name="terms_agree" required />
+        <span>I agree to the</span> <a href="/TermsAndConditions">Terms &amp; Conditions</a>
+      </div>
+
+      <button type="submit">Sign Up</button>
+    </form>
+
+    <p class="white-text">
+      Log In <a href="/">Log In</a> or
+      <a href="/PartnerRegistration">Sign Up as Partner</a>
+    </p>
+  </div>
+</body>
+</html>

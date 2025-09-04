@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Explore - SAVR</title>
+
+  <!-- Montserrat -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- Google Material Icons (Rounded) -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+
+  <style>
+    :root{
+      --brand-green:#004d40;
+      --brand-yellow:#edd070;
+    }
+
+    body{
+      margin:0;
+      font-family:'Montserrat', sans-serif, 'TT Norms';
+      background:#fff;
+      width:100%;
+    }
+
+    /* ===== NAVBAR ===== */
+    .navbar{
+      background:var(--brand-green);
+      color:#fff;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:1% 2%;
+      /* rounded bottom corners only */
+      border-bottom-left-radius:24px;
+      border-bottom-right-radius:24px;
+    }
+    
+    .navbar h1{
+      margin:0;
+      color:#edd070;
+      line-height:1;
+      font-weight:800;
+      font-family:'TT Norms',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    }
+
+    .icons{
+      display:flex;
+      gap:3vw;
+      align-items:center;
+    }
+    .icon{
+      color:#ffffff;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .icon .material-icons-round{
+      font-size:2.2rem; /* tweak icon size here */
+      line-height:1;
+    }
+
+    /* ===== SEARCH BAR GROUP ===== */
+    .search-container{
+      display:flex;
+      justify-content:center;
+      margin:2% 0;
+      padding:0 2%;
+    }
+    .search-form{
+      display:flex;
+      align-items:center;
+      width:100%;
+      max-width:1100px; /* overall max width of the search row */
+      gap:1vw;          /* spacing between inputs and button */
+    }
+    .search-pill{
+      flex:1 1 0;
+      display:flex;
+      align-items:center;
+      background:#e6e6e6;
+      border-radius:35px; /* each input as its own pill */
+      padding:0.6rem 1rem;
+    }
+    .search-input{
+      width:100%;
+      border:none;
+      outline:none;
+      background:transparent;
+      color:#454545;
+      font-size:1rem;  /* change text size here */
+    }
+    .search-button{
+      background:var(--brand-green);
+      color:#ffffff;
+      border:none;
+      padding:0.8rem 1.6rem;
+      border-radius:35px;
+      cursor:pointer;
+      font-size:1rem; /* change button text size here */
+      white-space:nowrap;
+    }
+    .search-button:hover{
+      background:#003b31;
+    }
+
+    .section{margin:2% 0;}
+    .section h3{color:#454545;font-size:2vw;margin-left:5%;}
+
+    /* ===== CARD STRIPS ===== */
+    .cards{
+      display:flex;
+      overflow-x:auto;
+      gap:2%;
+      padding:0 5%;
+    }
+
+    /* ===== CARDS ===== */
+    .store-card,.food-card{
+      min-width:20vw;
+      max-width:30vw;
+      min-height:15vw;
+      max-height:25vw;
+      background:#ffffff;
+      border:0.01vw solid var(--brand-green);
+      border-radius:10%;
+      padding:2%;
+      text-align:center;
+      overflow:hidden;
+    }
+    .food-card{ background:var(--brand-green); color:#ffffff; }
+
+    .store-card img,.food-card img{
+      width:100%;
+      height:10vw;
+      object-fit:cover;
+      border-radius:10px;
+    }
+
+    /* FOOD card typography */
+    .food-title{ font-size:1vw; font-weight:700; margin:0.5em 0 0.2em; }
+    .food-restaurant{ font-size:0.9vw; font-weight:400; margin:0.2em 0; color:#e9f7ef; }
+    .food-price{ font-size:1.2vw; font-weight:800; margin:0.2em 0 0.4em; color:#ffffff; }
+
+    /* STORE card typography */
+    .store-title{ font-size:1.2vw; font-weight:700; margin:0.5em 0 0.2em; color:var(--brand-green); }
+    .store-distance{ font-size:1vw; font-weight:400; margin:0.2em 0; color:var(--brand-green); }
+
+    /* Add-to-cart */
+    .add-button{
+      background:#ffffff;
+      color:var(--brand-green);
+      border:none;
+      padding:2% 5%;
+      border-radius:35px;
+      cursor:pointer;
+      font-size:1.2vw;
+      font-weight:bold;
+    }
+    .add-button:disabled{opacity:0.5;cursor:not-allowed;}
+
+    .selected-store{ width:90%; margin:0 auto; }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <div class="navbar">
+    <h1>SAVR</h1>
+    <div class="icons">
+      <a href="/cart" class="icon" aria-label="Cart"><span class="material-icons-round">shopping_cart</span></a>
+      <a href="/explore" class="icon" aria-label="Search"><span class="material-icons-round">search</span></a>
+      <a href="/profile" class="icon" aria-label="Profile"><span class="material-icons-round">person</span></a>
+    </div>
+  </div>
+
+  <!-- SEARCH -->
+  <div class="search-container">
+    <form class="search-form" method="GET" action="/explore">
+      <div class="search-pill">
+        <input class="search-input" type="text" name="search_restaurant" placeholder="Search Restaurant">
+      </div>
+      <div class="search-pill">
+        <input class="search-input" type="text" name="search_food" placeholder="Search Foods">
+      </div>
+      <input type="hidden" id="lat" name="lat">
+      <input type="hidden" id="lon" name="lon">
+      <button type="submit" class="search-button">Search</button>
+    </form>
+  </div>
+
+  {% if selected_store %}
+  <div class="section">
+    <h3>Selected Store</h3>
+    <div class="selected-store store-card">
+      <img src="{{ selected_store.image }}" alt="{{ selected_store.name }}">
+      <div class="store-title">{{ selected_store.name }}</div>
+      <div class="store-distance">{{ selected_store.distance }} KM</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Foods</h3>
+    <div class="cards">
+      {% for food in selected_foods %}
+      <div class="food-card">
+        <img src="{{ food.image }}" alt="{{ food.name }}">
+        <div class="food-title">{{ food.name }}</div>
+        <div class="food-restaurant">{{ selected_store.name }}</div>
+        <div class="food-price">{{ (food.price|int // 1000) }}k</div>
+        <form method="POST" action="{{ url_for('explore', store=selected_store.name) }}">
+          <input type="hidden" name="store" value="{{ selected_store.name }}">
+          <input type="hidden" name="food" value="{{ food.name }}">
+          <button class="add-button" type="submit" {% if food.quantity <= 0 %}disabled{% endif %}>Add to Cart</button>
+        </form>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  {% else %}
+  <div class="section">
+    <h3>Trending Store</h3>
+    <div class="cards">
+      {% for store in trending_stores %}
+      <a href="/explore?store={{ store.name | urlencode }}" style="text-decoration:none;">
+        <div class="store-card">
+          <img src="{{ store.image }}" alt="{{ store.name }}">
+          <div class="store-title">{{ store.name }}</div>
+          <div class="store-distance">{{ store.distance }} KM</div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Trending Food</h3>
+    <div class="cards">
+      {% for food in trending_foods %}
+      <div class="food-card">
+        <img src="{{ food.image }}" alt="{{ food.name }}">
+        <div class="food-title">{{ food.name }}</div>
+        <div class="food-restaurant">{{ food.store }}</div>
+        <div class="food-price">{{ (food.price|int // 1000) }}k</div>
+        <form method="POST" action="{{ url_for('explore', store=food.store) }}">
+          <input type="hidden" name="store" value="{{ food.store }}">
+          <input type="hidden" name="food" value="{{ food.name }}">
+          <button class="add-button" type="submit" {% if food.quantity <= 0 %}disabled{% endif %}>Add to Cart</button>
+        </form>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <script>
+    // Try to capture client geolocation quickly; server has fallback anyway.
+    if (navigator.geolocation) {
+      const setPos = (pos) => {
+        document.getElementById('lat').value = pos.coords.latitude;
+        document.getElementById('lon').value = pos.coords.longitude;
+      };
+      navigator.geolocation.getCurrentPosition(setPos, () => {}, {timeout:3000});
+    }
+  </script>
+</body>
+</html>

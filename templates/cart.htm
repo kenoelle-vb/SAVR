@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cart - SAVR</title>
+
+  <!-- Material Icons (Rounded, flat look) -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+
+  <style>
+    :root{
+      /* All greens unified to #004d40 */
+      --green:#004d40;   /* navbar / summary */
+      --accent:#004d40;  /* brand green for borders/text */
+      --gold:#edd070;    /* pastel yellow for icons/title */
+      --border:#e6e6e6;
+      --text:#1f2d27;
+    }
+
+    body{
+      margin:0;
+      font-family:'TT Norms',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--text);
+      background:#fff;
+    }
+
+    /* ===== NAVBAR ===== */
+    .navbar{
+      background:var(--green);
+      color:#fff;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:16px 24px;
+      border-bottom-left-radius:24px;
+      border-bottom-right-radius:24px;
+    }
+    .navbar h1{
+      margin:0;
+      color:var(--gold);
+      line-height:1;
+      font-weight:800;
+    }
+
+    .icons{
+      display:flex;
+      gap:22px;
+      align-items:center;
+    }
+    .icon{
+      color:#ffffff;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .icon .material-icons-round{
+      font-size:28px;
+      line-height:1;
+    }
+
+    /* ===== PAGE LAYOUT ===== */
+    .page{max-width:1200px;margin:24px auto;padding:0 16px}
+    h2{margin:8px 0 24px 0}
+
+    .grid{display:grid;grid-template-columns:2fr 1fr;gap:24px}
+    @media (max-width: 900px){.grid{grid-template-columns:1fr}}
+
+    .items{display:flex;flex-direction:column;gap:16px}
+
+    .card{
+      background:#fff;
+      border:0.01vw solid var(--accent);
+      border-radius:16px;
+      padding:16px 20px;
+      display:grid;
+      grid-template-columns:96px 1fr auto auto;
+      align-items:center;
+      gap:16px;
+    }
+    @media (max-width:700px){
+      .card{
+        grid-template-columns:72px 1fr;
+        grid-template-rows:auto auto auto;
+        gap:12px;
+      }
+    }
+
+    .thumb{
+      width:96px;height:96px;object-fit:cover;border-radius:12px;border:1px solid var(--border)
+    }
+    @media (max-width:700px){.thumb{width:72px;height:72px}}
+
+    .title{font-weight:800;color:var(--accent);font-size:18px}
+    .subtitle{color:rgba(0,77,64,.85);font-size:14px}
+
+    .meta{color:var(--accent);font-weight:600;text-align:left}
+    .total{color:var(--accent);font-weight:800;white-space:nowrap}
+
+    .actions{display:flex;gap:8px;justify-content:flex-end}
+    .btn{border:none;border-radius:9999px;padding:8px 12px;cursor:pointer;font-weight:700}
+    .btn-pill{background:#f2f2f2}
+    .btn-danger{background:#ffe8e8;color:#a32020}
+
+    /* ===== SUMMARY ===== */
+    .summary{
+      position:sticky;top:16px;
+      background:var(--green);
+      color:#fff;
+      border-radius:16px;
+      padding:24px
+    }
+    .sum-title{opacity:.9;margin:0 0 8px 0}
+    .sum-amount{font-size:28px;font-weight:900;margin-bottom:16px}
+    .btn-primary{
+      background:#fff;color:var(--green);border:none;border-radius:9999px;
+      padding:12px 16px;font-weight:800;cursor:pointer
+    }
+    .empty{
+      border:1px dashed var(--border);border-radius:12px;padding:24px;text-align:center;color:#6a7
+    }
+
+    /* ===== QR code in summary card ===== */
+    .qr {
+      width: 80%;               /* show at 80% of card width */
+      aspect-ratio: 1 / 1;      /* keep perfect square */
+      object-fit: contain;       /* never crop the QR */
+      border-radius: 12px;
+      background: #fff;          /* contrast on dark card */
+      padding: 12px;             /* breathing room */
+      margin: 12px auto 8px auto;/* centered horizontally */
+      display: block;
+    }
+    .qr-note{
+      margin: 0 0 12px 0;
+      font-size: 14px;
+      opacity: .9;
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <h1>SAVR</h1>
+    <div class="icons">
+      <a href="/cart" class="icon" aria-label="Cart"><span class="material-icons-round">shopping_cart</span></a>
+      <a href="/explore" class="icon" aria-label="Explore"><span class="material-icons-round">search</span></a>
+      <a href="/profile" class="icon" aria-label="Profile"><span class="material-icons-round">person</span></a>
+    </div>
+  </div>
+
+  <div class="page">
+    <h2>Checkout</h2>
+
+    <div class="grid">
+      <!-- LEFT: items -->
+      <div class="items">
+        {% if items and items|length > 0 %}
+          {% for item in items %}
+            <div class="card">
+              <img class="thumb" src="{{ item.image }}" alt="{{ item.food }}"/>
+
+              <div>
+                <div class="title">{{ item.food }}</div>
+                <div class="subtitle">{{ item.store }}</div>
+              </div>
+
+              <div class="meta">
+                <div>Price: <strong>{{ item.price|idr }}</strong></div>
+                <div>Quantity: <strong>{{ item.qty }}</strong></div>
+              </div>
+
+              <div class="total">Total: <strong>{{ item.line_total|idr }}</strong></div>
+
+              <form class="actions" method="POST" action="/cart/update" style="grid-column: 1 / -1;">
+                <input type="hidden" name="index" value="{{ item.index }}">
+                <button class="btn btn-pill" name="action" value="dec" type="submit">−</button>
+                <button class="btn btn-pill" name="action" value="inc" type="submit">+</button>
+                <button class="btn btn-danger" name="action" value="remove" type="submit">Remove</button>
+              </form>
+            </div>
+          {% endfor %}
+        {% else %}
+          <div class="empty">Your cart is empty. Go to <a href="/explore">Explore</a> to add items.</div>
+        {% endif %}
+      </div>
+
+      <!-- RIGHT: summary -->
+      <aside class="summary">
+        <p class="sum-title">Total Bill</p>
+
+        <!-- QRIS image -->
+        <img
+          class="qr"
+          src="{{ url_for('static', filename='QRIS_SAVR.jpeg') }}"
+          alt="QRIS payment QR code"
+        />
+        <p class="qr-note">
+          Scan the QR Code to pay, and when done click “Confirm Payment” to confirm the payment.
+        </p>
+
+        <div class="sum-amount">{{ grand_total|idr }}</div>
+        <form method="POST" action="/checkout/confirm">
+          <button class="btn-primary" type="submit">Confirm Payment</button>
+        </form>
+      </aside>
+    </div>
+  </div>
+</body>
+</html>
